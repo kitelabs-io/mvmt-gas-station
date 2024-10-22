@@ -1,0 +1,10 @@
+{
+	"version": "0.0.1",
+	"private": true,
+	"name": "common",
+	"module": "index.ts",
+	"type": "module",
+	"workspaces": [
+		"packages/*"
+	]
+}

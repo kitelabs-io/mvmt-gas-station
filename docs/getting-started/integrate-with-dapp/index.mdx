@@ -1,0 +1,101 @@
+# Integrate with dApp
+
+Now that we have a funded gas station, we can begin integrating it with a dApp. Let's start with a sequence diagram to see how it works.
+
+## Build and Submitting transaction on Client
+
+```mermaid
+sequenceDiagram
+  %%{init: {'theme': 'neutral'}}%%
+  autonumber
+  participant User
+  participant Wallet
+  participant dApp
+  participant GasStation
+
+  User ->> dApp: Ask for a transaction
+  dApp ->> dApp: Build transaction
+  dApp ->> GasStation: Request Gas Sponsor
+  GasStation ->> GasStation: Validate and sign transaction
+  GasStation ->> dApp: Return fee payer address and signature
+  dApp ->> Wallet: Request Signature
+  User ->> Wallet: Sign
+  Wallet ->> FullNode: Submit Transaction
+```
+
+Summary:
+
+- The user initiates a transaction request through the dApp.
+- The dApp builds the transaction and requests sponsorship from the gas station.
+- The gas station validates the transaction, signs it if it meets the required conditions, and returns the fee payer address and signature to the dApp.
+- The dApp requests the user's signature through their wallet.
+- The user signs the transaction using their wallet.
+- The wallet submits the signed transaction to the full node for processing.
+
+## Example
+
+```ts
+import {
+	Account,
+	AccountAddress,
+	Aptos,
+	AptosConfig,
+	Ed25519PrivateKey,
+	Network,
+} from "@aptos-labs/ts-sdk";
+import { AuthenticatorDeserializer } from "@lib/deserializer";
+
+const STATION_ID = "<your_station_id>";
+const CONTRACT_ADDRESS = "<dapp_contract_address>";
+
+const aptosConfig = new AptosConfig({
+	network: Network.TESTNET,
+});
+
+const aptos = new Aptos(aptosConfig);
+
+const author = Account.generate();
+
+const txn = await aptos.transaction.build.simple({
+	sender: author.accountAddress,
+	withFeePayer: true, // this flag must be set to enable fee sponsoring
+	data: {
+		function: `${CONTRACT_ADDRESS}::feed::write`,
+		functionArguments: ["Hello world!"],
+	},
+});
+
+
+
+// Call gas station to get fee payer signature
+const { data } = await fetch("http://<gas_station_host>/api/v1/sponsor-tx", {
+	method: "POST",
+	headers: {
+		"Content-Type": "application/json",
+	},
+	body: JSON.stringify({
+		txSimpleBase64: Buffer.from(txn.bcsToBytes()).toString("base64"),
+		stationId: STATION_ID,
+	}),
+}).then(res => res.json();
+
+// fee payer address must be set as it contributes to transaction integrity
+txn.feePayerAddress = AccountAddress.fromString(data.feePayerAddress);
+
+const senderAuth = aptos.transaction.sign({
+	signer: author,
+	transaction: txn,
+});
+
+const feePayerAuth = AuthenticatorDeserializer.fromBase64(
+	data.feePayerAuthenticator,
+).auth;
+
+const submitResult = await aptos.transaction.submit.simple({
+	transaction: txn,
+	senderAuthenticator: senderAuth,
+	feePayerAuthenticator: feePayerAuth,
+});
+
+console.log({ submitResult });
+```

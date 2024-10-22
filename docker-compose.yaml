@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_INITDB_DATABASE: gas-station
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+    volumes:
+      - mongo_data:/data/db
+
+  gas-station:
+    depends_on:
+      - mongo
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    environment:
+      - NODE_ENV=production
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo_data:

@@ -1,0 +1,15 @@
+name: Default workflow
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+
+jobs:
+  call-workflow:
+    uses: kitelabs-io/workflow-templates/.github/workflows/docker.yml@main
+    with:
+      IMAGE_REPOSITORY: asia.gcr.io/develop-430303/gas-station
+    secrets:
+      GCR_CREDENTIALS: ${{ secrets.GCR_CREDENTIALS }}
+       
