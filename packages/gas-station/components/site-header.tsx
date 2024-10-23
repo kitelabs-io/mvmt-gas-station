@@ -5,6 +5,7 @@ import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 import GithubButton from "./github-button"
+import NetworkSwitch from "./network-switch"
 
 export async function SiteHeader() {
 	const session = await auth()
@@ -19,6 +20,7 @@ export async function SiteHeader() {
 				/>
 				<div className="flex flex-1 items-center justify-end space-x-4">
 					<nav className="flex items-center space-x-1">
+						<NetworkSwitch />
 						<GithubButton />
 						<ThemeToggle />
 						{isLoggedIn && (

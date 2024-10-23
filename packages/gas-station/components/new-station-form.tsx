@@ -3,10 +3,10 @@
 import { useState } from "react"
 import { PredicateType } from "@/constants/predicate"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useFormStatus } from "react-dom"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { useNetwork } from "@/hooks/use-network"
 import { registerGasStation } from "@/app/actions"
 
 import { Button } from "./ui/button"
@@ -67,6 +67,7 @@ const formSchema = z
 	)
 
 export default function NewStationForm({ sponsorId }: { sponsorId: string }) {
+	const [network] = useNetwork()
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 	})
@@ -91,7 +92,7 @@ export default function NewStationForm({ sponsorId }: { sponsorId: string }) {
 						className="grid w-full gap-4"
 						onSubmit={form.handleSubmit(async (values) => {
 							setSubmitting(true)
-							await registerGasStation({ ...values, sponsorId })
+							await registerGasStation({ ...values, sponsorId, network })
 							setOpen(false)
 							setSubmitting(false)
 							form.reset({})

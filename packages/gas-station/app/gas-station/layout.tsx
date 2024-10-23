@@ -1,7 +1,6 @@
 import { Suspense } from "react"
 
 import { Skeleton } from "@/components/ui/skeleton"
-import { Leftbar } from "@/components/leftbar"
 
 export default function DocsLayout({
 	children,

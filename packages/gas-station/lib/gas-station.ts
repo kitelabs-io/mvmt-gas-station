@@ -1,4 +1,4 @@
-import GasStationModel from "@/models/gas-station"
+import GasStationModel, { GasStation } from "@/models/gas-station"
 import {
 	Account,
 	AccountAuthenticator,
@@ -9,30 +9,34 @@ import * as uuid from "uuid"
 
 import aptos from "@/lib/aptos"
 
-import { connectToDatabase } from "./mongodb"
+import { waitForDbConnection } from "./mongodb"
 
 /**
  * Creates a new gas station.
+ * @param network the blockchain network of gas station
  * @param sponsorId The ID of the sponsor.
  * @param predicateKind The kind of predicate.
  * @param predicateValue The value of the predicate.
- * @returns {Promise<{ address: string; sponsorId: string; predicateKind: string; predicateValue: string }>} An object containing the created gas station's details.
+ * @returns {Promise<{network: string, address: string; sponsorId: string; predicateKind: string; predicateValue: string }>} An object containing the created gas station's details.
  */
 export async function createGasStation(
+	network: string,
 	sponsorId: string,
 	predicateKind: string,
 	predicateValue: string
 ): Promise<{
+	network: string
 	address: string
 	sponsorId: string
 	predicateKind: string
 	predicateValue: string
 }> {
-	await connectToDatabase()
+	await waitForDbConnection()
 
 	const stationId = uuid.v4()
 	const account = Account.generate()
 	const station = new GasStationModel({
+		network,
 		sponsorId,
 		stationId,
 		address: account.accountAddress.toString(),
@@ -45,7 +49,13 @@ export async function createGasStation(
 
 	await station.save()
 
-	return { address: station.address, sponsorId, predicateKind, predicateValue }
+	return {
+		network,
+		address: station.address,
+		sponsorId,
+		predicateKind,
+		predicateValue,
+	}
 }
 
 /**
@@ -61,7 +71,7 @@ export async function sponsorTx(
 	feePayerAuthenticator: AccountAuthenticator
 	feePayerAddress: string
 }> {
-	await connectToDatabase()
+	await waitForDbConnection()
 
 	const station = await GasStationModel.findOne({ stationId })
 
@@ -93,12 +103,16 @@ export async function sponsorTx(
 }
 
 /**
- * Finds gas stations by sponsor ID.
+ * Finds gas stations by network and sponsor ID.
+ * @param network The blockchain network to search for.
  * @param sponsorId The ID of the sponsor to search for.
- * @returns A promise that resolves to an array of gas station documents matching the sponsor ID.
+ * @returns {Promise<GasStation[]>} A promise that resolves to an array of gas station documents matching the network and sponsor ID.
  */
-export async function findGasStationsBySponsorId(sponsorId: string) {
-	await connectToDatabase()
-	const data = await GasStationModel.find({ sponsorId }).exec()
+export async function findGasStations(
+	network: string,
+	sponsorId: string
+): Promise<GasStation[]> {
+	await waitForDbConnection()
+	const data = await GasStationModel.find({ network, sponsorId }).exec()
 	return data
 }
