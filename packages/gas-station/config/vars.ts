@@ -1,3 +1,3 @@
 export const enableLoginWithEmail = false
 export const enableLoginWithGitHub = true
-export const enableLoginWithGoogle = false
+export const enableLoginWithGoogle = true

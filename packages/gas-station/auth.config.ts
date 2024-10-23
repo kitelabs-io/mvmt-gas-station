@@ -1,5 +1,6 @@
 import type { NextAuthConfig } from "next-auth"
 import GitHub from "next-auth/providers/github"
+import Google from "next-auth/providers/google"
 
 declare module "next-auth" {
 	interface Session {
@@ -16,7 +17,16 @@ declare module "next-auth/jwt" {
 }
 
 export const authConfig = {
-	providers: [GitHub],
+	providers: [
+	 GitHub, Google({
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+    })],
 	session: { strategy: "jwt" },
 	callbacks: {
 		async jwt({ token, user, account }) {

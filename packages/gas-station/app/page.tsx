@@ -9,7 +9,7 @@ export default async function IndexPage() {
 				<h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
 					Welcome to Movement Gas Station
 				</h1>
-				<p className="text-muted-foreground max-w-[700px] text-lg">
+				<p className="max-w-[700px] text-lg text-muted-foreground">
 					Bringing gas stations to your dApp with ease in the Movement network.
 				</p>
 			</div>
