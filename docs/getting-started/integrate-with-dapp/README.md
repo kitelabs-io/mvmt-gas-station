@@ -38,15 +38,44 @@ Summary:
 import {
 	Account,
 	AccountAddress,
+	AccountAuthenticator,
 	Aptos,
 	AptosConfig,
-	Ed25519PrivateKey,
+	Deserializer,
 	Network,
+	Serializer,
 } from "@aptos-labs/ts-sdk";
-import { AuthenticatorDeserializer } from "@lib/deserializer";
 
-const STATION_ID = "<your_station_id>";
-const CONTRACT_ADDRESS = "<dapp_contract_address>";
+const { GAS_STATION_HOST, STATION_ID, CONTRACT_ADDRESS } = process.env;
+
+class AuthenticatorDeserializer {
+	auth: AccountAuthenticator;
+
+	constructor(auth: AccountAuthenticator) {
+		this.auth = auth;
+	}
+
+	static fromBase64(base64: string) {
+		const buffer = Buffer.from(base64, "base64");
+		const bytes = new Uint8Array(buffer);
+		const deserializer = new Deserializer(bytes);
+
+		const auth = AccountAuthenticator.deserialize(deserializer);
+
+		return new AuthenticatorDeserializer(auth);
+	}
+
+	toBase64() {
+		const serializer = new Serializer();
+
+		this.auth.serialize(serializer);
+
+		const bytes = serializer.toUint8Array();
+		const base64 = Buffer.from(bytes).toString("base64");
+
+		return base64;
+	}
+}
 
 const aptosConfig = new AptosConfig({
 	network: Network.TESTNET,
@@ -54,6 +83,7 @@ const aptosConfig = new AptosConfig({
 
 const aptos = new Aptos(aptosConfig);
 
+// Generate an empty wallet and submit a transaction to post a message to a decentralized feed
 const author = Account.generate();
 
 const txn = await aptos.transaction.build.simple({
@@ -65,10 +95,8 @@ const txn = await aptos.transaction.build.simple({
 	},
 });
 
-
-
 // Call gas station to get fee payer signature
-const { data } = await fetch("http://<gas_station_host>/api/v1/sponsor-tx", {
+const { data } = await fetch(`${GAS_STATION_HOST}/api/v1/sponsor-tx`, {
 	method: "POST",
 	headers: {
 		"Content-Type": "application/json",
@@ -77,7 +105,7 @@ const { data } = await fetch("http://<gas_station_host>/api/v1/sponsor-tx", {
 		txSimpleBase64: Buffer.from(txn.bcsToBytes()).toString("base64"),
 		stationId: STATION_ID,
 	}),
-}).then(res => res.json();
+}).then((res) => res.json());
 
 // fee payer address must be set as it contributes to transaction integrity
 txn.feePayerAddress = AccountAddress.fromString(data.feePayerAddress);
