@@ -26,4 +26,4 @@ Navigate to the `Gas Station` interface in the header bar.
 
 **Note**: Before proceeding, transfer funds from your preferred wallet to the gas station's address. Your gas station requires these funds to successfully sponsor transactions for users.
 
-[Next: Integrate with dApp](../integrate-with-dapp/index.md)
+[Next: Integrate with dApp](../integrate-with-dapp)
