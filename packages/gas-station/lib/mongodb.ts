@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 let isConnected = false
 
-export const connectToDatabase = async () => {
+export const waitForDbConnection = async () => {
 	if (isConnected) {
 		return
 	}

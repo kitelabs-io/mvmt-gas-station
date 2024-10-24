@@ -3,8 +3,9 @@ import mongoose from "mongoose"
 
 const GasStationSchema = new mongoose.Schema(
 	{
-		sponsorId: { type: String, required: true, index: true  },
-		stationId: { type: String, required: true, unique: true, index: true},
+		network: { type: String, required: true, index: true },
+		sponsorId: { type: String, required: true, index: true },
+		stationId: { type: String, required: true, unique: true, index: true },
 		predicate: {
 			type: { kind: String, value: String },
 			required: true,
