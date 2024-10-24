@@ -25,4 +25,4 @@ Before you begin, we assume you have following background:
 
 Let's get started by creating your first Gas Station!
 
-[Create a Gas Station](./create-gas-station/index.mdx)
+[Create a Gas Station](./create-gas-station)
