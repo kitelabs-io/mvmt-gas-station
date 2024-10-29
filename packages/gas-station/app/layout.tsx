@@ -1,5 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata, type Viewport } from "next"
+import WalletProvider from "@/providers/wallet-provider"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -39,10 +40,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
 					)}
 				>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-						<div className="relative flex min-h-screen flex-col">
-							<SiteHeader />
-							<div className="flex-1">{children}</div>
-						</div>
+						<WalletProvider>
+							<div className="relative flex min-h-screen flex-col">
+								<SiteHeader />
+								<div className="flex-1">{children}</div>
+							</div>
+						</WalletProvider>
 						<TailwindIndicator />
 					</ThemeProvider>
 				</body>
