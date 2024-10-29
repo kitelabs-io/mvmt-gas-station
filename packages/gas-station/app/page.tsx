@@ -28,7 +28,7 @@ export default async function IndexPage() {
 				<Link
 					target="_blank"
 					rel="noopener noreferrer"
-					href="https://github.com/kitelabs-io/mvmt-gas-station/blob/main/docs/getting-started/index.mdx"
+					href="https://github.com/kitelabs-io/mvmt-gas-station/blob/main/docs/getting-started"
 				>
 					<Button variant="outline">Getting Started</Button>
 				</Link>

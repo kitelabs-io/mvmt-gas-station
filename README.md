@@ -36,7 +36,7 @@ This project aims to accelerate adoption of the Movement network by simplifying 
 
 ## Getting Started
 
-To get started, follow the [Getting Started Guide](./docs/getting-started/index.mdx).
+To get started, follow the [Getting Started Guide](./docs/getting-started).
 
 ## Features & Roadmap
 

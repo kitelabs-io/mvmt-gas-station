@@ -12,7 +12,7 @@ export const siteConfig = {
 		},
 		{
 			title: "Getting Started",
-			href: "https://github.com/kitelabs-io/mvmt-gas-station/blob/main/docs/getting-started/index.mdx",
+			href: "https://github.com/kitelabs-io/mvmt-gas-station/blob/main/docs/getting-started",
 			public: true,
 			external: true,
 		},

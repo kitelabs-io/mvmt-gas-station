@@ -8,10 +8,10 @@ A Gas Station is a service that allows dApp to sponsor gas fees for their users,
 
 ## In this section
 
-1. [Create a Gas Station](./create-gas-station/index.mdx)
+1. [Create a Gas Station](./create-gas-station)
    Learn how to create and fund your own Gas Station.
 
-2. [Integrate with dApp](./integrate-with-dapp/index.mdx)
+2. [Integrate with dApp](./integrate-with-dapp)
    Discover how to integrate your Gas Station with your decentralized application.
 
 By following these guides, you'll be able to set up a Gas Station and start sponsoring transactions for your users
