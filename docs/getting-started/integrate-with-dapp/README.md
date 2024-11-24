@@ -102,7 +102,7 @@ const { data } = await fetch(`${GAS_STATION_HOST}/api/v1/sponsor-tx`, {
 		"Content-Type": "application/json",
 	},
 	body: JSON.stringify({
-		txSimpleBase64: Buffer.from(txn.bcsToBytes()).toString("base64"),
+		simpleTxBase64: Buffer.from(txn.bcsToBytes()).toString("base64"),
 		stationId: STATION_ID,
 	}),
 }).then((res) => res.json());

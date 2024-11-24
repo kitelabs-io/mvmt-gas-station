@@ -52,9 +52,6 @@ export class TransactionDeserializer {
 			module_name.address.toString(),
 			module_name.name.identifier,
 			function_name.identifier,
-			type_args.length
-				? `<${type_args.map((arg) => arg.toString()).join(", ")}>`
-				: "",
 		]
 			.filter(Boolean)
 			.join("::");

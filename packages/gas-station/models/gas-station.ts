@@ -23,6 +23,8 @@ const GasStationSchema = new mongoose.Schema(
 			matchEntryPredicate(identifier: string): boolean {
 				const { kind, value } = this.predicate
 
+				console.log({ kind, value, identifier })
+
 				if (!kind || !value) {
 					return false
 				}
