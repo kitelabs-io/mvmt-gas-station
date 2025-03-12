@@ -2,6 +2,12 @@ import { Network } from "@aptos-labs/ts-sdk"
 
 export const networks = [
 	{
+		value: "mainnet",
+		label: "Mainnet Beta",
+		explorerUrl: "https://explorer.movementnetwork.xyz",
+		type: Network.MAINNET,
+	},
+	{
 		value: "suzuka-testnet",
 		label: "Suzuka Testnet",
 		explorerUrl: "https://explorer.movementnetwork.xyz",
