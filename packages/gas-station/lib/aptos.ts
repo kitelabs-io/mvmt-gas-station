@@ -1,7 +1,7 @@
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk"
 import { invariant500 } from "common"
 
-const { NETWORK = Network.TESTNET } = process.env
+const { NETWORK = Network.MAINNET } = process.env
 
 const network = [
 	{
