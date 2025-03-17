@@ -102,6 +102,30 @@ export async function sponsorTx(
 	}
 }
 
+export async function getStationInfo(stationId: string): Promise<{
+	stationAddress: string
+	stationId: string
+	stationPublicKey: string
+}> {
+	await waitForDbConnection()
+
+	const station = await GasStationModel.findOne({ stationId })
+
+	invariant400(station, "Station not found")
+
+	const { privateKeyEncrypted: privateKey } = station
+
+	const feePayer = Account.fromPrivateKey({
+		privateKey: new Ed25519PrivateKey(privateKey),
+	})
+
+	return {
+		stationId,
+		stationAddress: feePayer.accountAddress.toString(),
+		stationPublicKey: feePayer.publicKey.toString(),
+	}
+}
+
 /**
  * Finds gas stations by network and sponsor ID.
  * @param network The blockchain network to search for.
