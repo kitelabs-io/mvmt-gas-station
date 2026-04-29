@@ -6,7 +6,7 @@ on:
 
 env:
   SERVICE: gas-station
-  IMAGE_REPOSITORY: asia.gcr.io/develop-430303/gas-station
+  IMAGE_REPOSITORY: asia.gcr.io/production-476602/gas-station
 
 jobs:
   build-develop:
